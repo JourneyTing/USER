@@ -1,21 +1,15 @@
-import { createStore, Store } from 'vuex'
+import { defineStore } from 'pinia'
 
-interface State {
-  todos: string[]
-}
-
-const store: Store<State> = createStore<State>({
-  state(): State {
-    return {
-      todos: []
-    }
-  },
-  mutations: {
-    addTodo(state, todo: string) {
-      state.todos.push(todo)
+export const store = defineStore('todoStore', {
+  state: () => ({
+    todos: [] as string[]
+  }),
+  actions: {
+    addTodo(todo: string) {
+      this.todos.push(todo)
     },
-    deleteTodo(state, index: number) {
-      state.todos.splice(index, 1)
+    deleteTodo(index: number) {
+      this.todos.splice(index, 1)
     }
   }
 })

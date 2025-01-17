@@ -21,7 +21,7 @@ const checkTodo = (index: number) => {
 </script>
 
 <template>
-  <div>
+  <body>
     <h1>My To-Do List</h1>
     <div>
       <img src="./assets/춘식이.jpg" />
@@ -34,22 +34,27 @@ const checkTodo = (index: number) => {
       <li
         v-for="(todo, index) in todos"
         :key="index"
-        :style="{ textDecoration: todo.isCompleted ? 'line-throgh' : 'none' }"
+        :style="{ textDecoration: todo.isCompleted ? 'line-through' : 'none' }"
       >
         {{ todo.text }}
         <button @click="checkTodo(index)">완료</button>
         <button @click="deleteTodo(index)">삭제</button>
       </li>
     </ul>
-  </div>
+  </body>
 </template>
 
 <style scoped>
+body {
+  background-image: url('./assets/choonsik_background.jpg');
+  background-size: cover;
+  background-position: center;
+}
+
 button {
   color: rgb(223, 0, 37);
 }
 
 li {
-  marker: none;
 }
 </style>
