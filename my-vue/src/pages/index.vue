@@ -1,25 +1,3 @@
-<script setup lang="ts">
-import { ref } from 'vue'
-
-const newTodo = ref('')
-const todos = ref<{ text: string; isCompleted: boolean }[]>([])
-
-const addTodo = () => {
-    if (newTodo.value.trim() !== '') {
-        todos.value.push({ text: newTodo.value, isCompleted: false })
-        newTodo.value = ''
-    }
-}
-
-const deleteTodo = (index: number) => {
-    todos.value.splice(index, 1)
-}
-
-const checkTodo = (index: number) => {
-    todos.value[index].isCompleted = !todos.value[index].isCompleted
-}
-</script>
-
 <template>
     <div class="max-w-sm rounded overflow-hidden shadow-lg">
         <img class="w-full" src="../assets/춘식이.jpg" alt="Sunset in the mountains" />
@@ -57,7 +35,10 @@ const checkTodo = (index: number) => {
                                 <p class="font-medium text-gray-900">{{ todo.text }}</p>
                             </div>
                         </div>
-                        <span class="text-green-500 text-sm font-medium">available</span>
+                        <div class="flex space-x-3">
+                            <button class="text-green-500 text-sm font-medium">Completed</button>
+                            <button class="text-red-500 text-sm font-medium">Delete</button>
+                        </div>
                     </li>
                     <!-- <li class="flex items-center justify-between p-4 bg-white rounded-lg shadow-sm">
                         <div class="flex items-center space-x-3">
@@ -109,6 +90,27 @@ const checkTodo = (index: number) => {
         </ul>
     </div> -->
 </template>
+<script setup lang="ts">
+import { ref } from 'vue'
+
+const newTodo = ref('')
+const todos = ref<>()
+
+const addTodo = () => {
+    if (newTodo.value.trim() !== '') {
+        todos.value.push({ text: newTodo.value, isCompleted: false })
+        newTodo.value = ''
+    }
+}
+
+const deleteTodo = (index: number) => {
+    todos.value.splice(index, 1)
+}
+
+const checkTodo = (index: number) => {
+    todos.value[index].isCompleted = !todos.value[index].isCompleted
+}
+</script>
 
 <style scoped>
 button {
