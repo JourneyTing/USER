@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
-export const todoStore = defineStore('todoStore', () => {
+export const useTodoStore = defineStore('useTodoStore', () => {
     const todoList = ref<TodoList[]>([])
 
     function loadTodoList() {

@@ -25,7 +25,7 @@
                 <ul class="space-y-3">
                     <li
                         class="flex items-center justify-between p-4 bg-white rounded-lg shadow-sm"
-                        v-for="(todo, index) in todos"
+                        v-for="(todo, index) in todoList"
                         :key="index"
                         :style="{ textDecoration: todo.isCompleted ? 'line-throgh' : 'none' }"
                     >
@@ -91,25 +91,49 @@
     </div> -->
 </template>
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
+import { useTodoStore } from '@/stores/TodoStore'
+import { storeToRefs } from 'pinia'
 
-const newTodo = ref('')
-const todos = ref<>()
+
+const todoStore = useTodoStore()
+
+const newTodo = ref<string>('')
+
+const { todoList } = storeToRefs(todoStore)
+
+onMounted(() => {
+    todoStore.loadTodoList()
+})
 
 const addTodo = () => {
-    if (newTodo.value.trim() !== '') {
-        todos.value.push({ text: newTodo.value, isCompleted: false })
+    if (newTodo.value.length > 0) {
+        const todo: TodoList = {
+            text: newTodo.value,
+            isCompleted: false
+        }
+
         newTodo.value = ''
+
+        todoStore.setTodoList(todo)
     }
 }
 
-const deleteTodo = (index: number) => {
-    todos.value.splice(index, 1)
-}
 
-const checkTodo = (index: number) => {
-    todos.value[index].isCompleted = !todos.value[index].isCompleted
-}
+// const addTodo = () => {
+//     if (newTodo.value.trim() !== '') {
+//         todos.value.push({ text: newTodo.value, isCompleted: false })
+//         newTodo.value = ''
+//     }
+// }
+
+// const deleteTodo = (index: number) => {
+//     todos.value.splice(index, 1)
+// }
+
+// const checkTodo = (index: number) => {
+//     todos.value[index].isCompleted = !todos.value[index].isCompleted
+// }
 </script>
 
 <style scoped>
