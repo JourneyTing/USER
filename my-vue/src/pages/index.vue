@@ -25,76 +25,35 @@
                 <ul class="space-y-3">
                     <li
                         class="flex items-center justify-between p-4 bg-white rounded-lg shadow-sm"
-                        v-for="(todo, index) in todoList"
-                        :key="index"
+                        v-for="(todo, idx) in todoList"
+                        :key="idx"
                         :style="{ textDecoration: todo.isCompleted ? 'line-throgh' : 'none' }"
                     >
                         <div class="flex items-center space-x-3">
-                            <span class="h-2.5 w-2.5 rounded-full bg-green-500"></span>
+                            <span
+                                class="h-2.5 w-2.5 rounded-full"
+                                :class="todo.isCompleted ? 'bg-green-500' : 'bg-yellow-500'"
+                            ></span>
                             <div>
                                 <p class="font-medium text-gray-900">{{ todo.text }}</p>
                             </div>
                         </div>
                         <div class="flex space-x-3">
-                            <button class="text-green-500 text-sm font-medium">Completed</button>
-                            <button class="text-red-500 text-sm font-medium">Delete</button>
+                            <button class="text-green-500 text-sm font-medium" @click="todoCompleted(idx)">
+                                Completed
+                            </button>
+                            <button class="text-red-500 text-sm font-medium" @click="todoDeleted(idx)">Delete</button>
                         </div>
                     </li>
-                    <!-- <li class="flex items-center justify-between p-4 bg-white rounded-lg shadow-sm">
-                        <div class="flex items-center space-x-3">
-                            <span class="h-2.5 w-2.5 rounded-full bg-green-500"></span>
-                            <div>
-                                <p class="font-medium text-gray-900"></p>
-                            </div>
-                        </div>
-                        <span class="text-green-500 text-sm font-medium">available</span>
-                    </li>
-                    <li class="flex items-center justify-between p-4 bg-white rounded-lg shadow-sm">
-                        <div class="flex items-center space-x-3">
-                            <span class="h-2.5 w-2.5 rounded-full bg-yellow-500"></span>
-                            <div>
-                                <p class="font-medium text-gray-900">Database</p>
-                            </div>
-                        </div>
-                        <span class="text-yellow-500 text-sm font-medium">not available</span>
-                    </li> -->
                 </ul>
             </div>
         </div>
     </div>
-    <!-- <div class="min-h-screen">
-        <h1>My To-Do List</h1>
-        <div>
-            <img src="../assets/춘식이.jpg" />
-        </div>
-        <ul>
-            <li
-                v-for="(todo, index) in todos"
-                :key="index"
-                :style="{ textDecoration: todo.isCompleted ? 'line-throgh' : 'none' }"
-            >
-                <span class="mr-2"> {{ todo.text }}</span>
-                <button
-                    class="px-6 py-2.5 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors mr-1"
-                    @click="checkTodo(index)"
-                >
-                    완료
-                </button>
-                <button
-                    class="px-6 py-2.5 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
-                    @click="deleteTodo(index)"
-                >
-                    삭제
-                </button>
-            </li>
-        </ul>
-    </div> -->
 </template>
 <script setup lang="ts">
 import { onMounted, ref, watch } from 'vue'
 import { useTodoStore } from '@/stores/TodoStore'
 import { storeToRefs } from 'pinia'
-
 
 const todoStore = useTodoStore()
 
@@ -119,6 +78,13 @@ const addTodo = () => {
     }
 }
 
+const todoCompleted = (idx: number) => {
+    todoList.value[idx].isCompleted = true
+}
+
+const todoDeleted = (idx: number) => {
+    todoList.value.splice(idx, 1)
+}
 
 // const addTodo = () => {
 //     if (newTodo.value.trim() !== '') {
