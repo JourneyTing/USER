@@ -1,12 +1,16 @@
 <template>
-    <section class="relative py-8 sm:p-8">
+    <div v-if="isLoading">loading..</div>
+    <section v-if="!isLoading" class="relative py-8 sm:p-8">
         <div class="w-full max-w-7xl mx-auto px-4 lg:px-8 xl:px-14">
             <div class="flex items-center justify-between gap-3 mb-5">
                 <div class="flex items-center gap-4">
-                    <h5 class="text-xl leading-8 font-semibold text-gray-900">January 2024</h5>
+                    <h5 class="text-xl leading-8 font-semibold text-gray-900">
+                        {{ dalryuk.year }}년 {{ dalryuk.month }}
+                    </h5>
                     <div class="flex items-center gap-2">
                         <button
                             class="hidden md:flex py-2 pl-1.5 pr-3 rounded-md bg-gray-50 border border-gray-300 items-center gap-1.5 text-xs font-medium text-gray-900 transition-all duration-500 hover:bg-gray-100"
+                            @click="getTodayCal()"
                         >
                             <svg
                                 class="pointer-events-none"
@@ -26,6 +30,7 @@
                         </button>
                         <button
                             class="text-gray-500 rounded transition-all duration-300 hover:bg-gray-100 hover:text-gray-900"
+                            @click="getAnotherCal(false)"
                         >
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -45,6 +50,7 @@
                         </button>
                         <button
                             class="text-gray-500 rounded transition-all duration-300 hover:bg-gray-100 hover:text-gray-900"
+                            @click="getAnotherCal(true)"
                         >
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -92,22 +98,19 @@
                 <div class="grid grid-cols-7 divide-gray-200">
                     <div v-for="(day, idx) in todoMonth" :key="idx">
                         <div
-                            style="
-                                background-image: url(https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcTtFKuquPs42p8wVeuFa8clMCGGQaj4XTgBLTrSrBjM7CEiSC8r);
-
-                                background-size: cover;
-                            "
                             :class="
-                                day.month !== currMonth
+                                day.month !== dalryuk.month
                                     ? 'p-3.5 bg-gray-50 xl:aspect-auto lg:h-28 border-b border-r border-gray-200 flex justify-between flex-col max-lg:items-center min-h-[70px] transition-all duration-300 hover:bg-gray-100'
                                     : 'p-3.5 border-b border-r border-gray-200 xl:aspect-auto lg:h-28 flex justify-between flex-col max-lg:items-center min-h-[70px] transition-all duration-300 hover:bg-gray-100'
                             "
                         >
                             <span
                                 :class="
-                                    day.month !== currMonth
+                                    day.month !== dalryuk.month
                                         ? 'text-xs font-semibold text-gray-500 flex items-center justify-center w-7 h-7 rounded-full'
-                                        : day.day === currDay
+                                        : day.month === current.month &&
+                                            day.day == current.day &&
+                                            dalryuk.year === current.year
                                           ? 'text-xs font-semibold text-white flex items-center justify-center w-7 h-7 rounded-full bg-indigo-600'
                                           : 'text-xs font-semibold text-gray-900 flex items-center justify-center w-7 h-7 rounded-full'
                                 "
@@ -127,110 +130,30 @@
 </template>
 <script setup lang="ts">
 import { onMounted, ref, watch } from 'vue'
+import { useCalendarStore } from '@/stores/CalendarStore'
+import { storeToRefs } from 'pinia'
 
-type monthly = {
-    date: Date
-    month: number
-    day: number
-    todo?: TodoList
-}
+const CalendarStore = useCalendarStore()
+const { todoMonth, current, dalryuk, isLoading } = storeToRefs(CalendarStore)
 
-const todoMonth = ref<monthly[]>([])
-
-const monthlyChunk = ref<any>([])
-
-const currMonth = ref<any>()
-const currDay = ref<any>()
-
-watch(todoMonth.value, () => {
-    if (todoMonth.value.length > 0) {
-        monthlyChunk.value = ref(chunkArray(todoMonth.value, 5))
-
-        console.log(monthlyChunk.value)
-    }
-})
-
-const chunkArray = (arr: monthly[], size: number) => {
-    const chunks = []
-    for (let i = 0; i < arr.length; i += size) {
-        chunks.push(arr.slice(i, i + size))
-    }
-
-    return chunks
-}
+const kijune = ref<number>(0)
 
 onMounted(() => {
-    let date = new Date()
-
-    const currentYear = date.getFullYear()
-    const currentMonth = date.getMonth()
-
-    currMonth.value = currentMonth + 1
-    currDay.value = date.getDate()
-
-    const prev = new Date(currentYear, currentMonth, 0)
-
-    const current = new Date(currentYear, currentMonth + 1, 0)
-
-    const next = new Date(currentYear, currentMonth + 2, 0)
-
-    const prevDate = prev.getDate()
-    const prevDay = prev.getDay()
-    const prevYear = prev.getFullYear()
-
-    console.log(prev)
-    console.log(prevDate, prevDay, prevYear, prev.getMonth())
-
-    const currentDate = current.getDate()
-    const currentDay = current.getDay()
-
-    console.log('123', currentDate)
-
-    const prevs: any = []
-    // const currents = [...Array(currentDate + 1).keys()].slice(1)
-    const currents: any = []
-    const nexts: any = []
-
-    // console.log(currents)
-
-    if (prevDay !== 6) {
-        for (let i = 0; i < prevDay + 1; i++) {
-            console.log(prevDate - i)
-            const month: monthly = {
-                date: prev,
-                month: prev.getMonth() + 1,
-                day: prevDate - i
-            }
-
-            prevs.unshift(month)
-        }
-    }
-
-    for (let i = 1; i <= currentDate; i++) {
-        const month: monthly = {
-            date: current,
-            month: current.getMonth() + 1,
-            day: i
-        }
-
-        currents.push(month)
-    }
-
-    for (let i = 1; i < 7 - currentDay; i++) {
-        console.log(i)
-
-        const month: monthly = {
-            date: next,
-            month: next.getMonth() + 1,
-            day: i
-        }
-        nexts.push(month)
-    }
-
-    const dates = prevs.concat(currents, nexts)
-
-    console.log(chunkArray(dates, 5))
-
-    todoMonth.value = dates
+    CalendarStore.setCurrentMonth()
+    CalendarStore.setCalendarDate()
 })
+
+const getTodayCal = () => {
+    CalendarStore.setCalendarDate()
+}
+
+const getAnotherCal = (type: boolean) => {
+    if (type) {
+        kijune.value += 1
+    } else {
+        kijune.value -= 1
+    }
+
+    CalendarStore.setCalendarDate(kijune.value)
+}
 </script>
