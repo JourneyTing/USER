@@ -63,6 +63,7 @@ export const useCalendarStore = defineStore('useCalendarStore', () => {
             for (let i = 0; i < prevDay + 1; i++) {
                 const month: Monthly = {
                     date: prev,
+                    year: prev.getFullYear(),
                     month: prev.getMonth() + 1,
                     day: prevDate - i
                 }
@@ -74,6 +75,7 @@ export const useCalendarStore = defineStore('useCalendarStore', () => {
         for (let i = 1; i <= currentDate; i++) {
             const month: Monthly = {
                 date: curr,
+                year: curr.getFullYear(),
                 month: curr.getMonth() + 1,
                 day: i
             }
@@ -84,6 +86,7 @@ export const useCalendarStore = defineStore('useCalendarStore', () => {
         for (let i = 1; i < 7 - currentDay; i++) {
             const month: Monthly = {
                 date: next,
+                year: next.getFullYear(),
                 month: next.getMonth() + 1,
                 day: i
             }

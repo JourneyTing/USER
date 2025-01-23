@@ -117,9 +117,13 @@
                                 >{{ day.day }}</span
                             >
 
-                            <span v-if="day.todo" class="hidden lg:block text-xs font-medium text-gray-500">{{
-                                day.todo.text
-                            }}</span>
+                            <span
+                                v-for="(item, idx) in day.todo"
+                                :key="idx"
+                                v-if="day.todo"
+                                class="hidden lg:block text-xs font-medium text-gray-500"
+                                >{{ item.text }}</span
+                            >
                             <span class="lg:hidden w-2 h-2 rounded-full bg-gray-400"></span>
                         </div>
                     </div>
@@ -132,15 +136,21 @@
 import { onMounted, ref, watch } from 'vue'
 import { useCalendarStore } from '@/stores/CalendarStore'
 import { storeToRefs } from 'pinia'
+import { useTodoStore } from '@/stores/TodoStore'
 
 const CalendarStore = useCalendarStore()
+const TodoStore = useTodoStore()
 const { todoMonth, current, dalryuk, isLoading } = storeToRefs(CalendarStore)
 
 const kijune = ref<number>(0)
 
 onMounted(() => {
+    TodoStore.loadTodoList()
     CalendarStore.setCurrentMonth()
     CalendarStore.setCalendarDate()
+    TodoStore.getMonthlyTodos(todoMonth.value)
+
+    console.log(todoMonth.value)
 })
 
 const getTodayCal = () => {

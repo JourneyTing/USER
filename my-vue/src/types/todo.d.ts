@@ -1,4 +1,19 @@
 declare global {
+    interface YearsTodo {
+        year: number
+        yearTodos: MonthsTodo[]
+    }
+
+    interface MonthsTodo {
+        month: number
+        monthTodos: DaysTodo[]
+    }
+
+    interface DaysTodo {
+        days: number
+        Todos: TodoList[]
+    }
+
     interface TodoList {
         text: string
         isCompleted: boolean
@@ -6,9 +21,10 @@ declare global {
 
     interface Monthly {
         date: Date
+        year: number
         month: number
         day: number
-        todo?: TodoList
+        todo?: TodoList[]
     }
 
     interface CurrentMonthly {
