@@ -1,0 +1,17 @@
+name: Custom Push Message
+
+on:
+  push:
+    branches:
+      - temp
+
+jobs:
+  print-message:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Print Custom Message
+        run: echo "🎉 Custom Message: Code has been pushed to the main branch!"
