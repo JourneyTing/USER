@@ -103,6 +103,7 @@
                                     ? 'p-3.5 bg-gray-50 xl:aspect-auto lg:h-28 border-b border-r border-gray-200 flex justify-between flex-col max-lg:items-center min-h-[70px] transition-all duration-300 hover:bg-gray-100'
                                     : 'p-3.5 border-b border-r border-gray-200 xl:aspect-auto lg:h-28 flex justify-between flex-col max-lg:items-center min-h-[70px] transition-all duration-300 hover:bg-gray-100'
                             "
+                            @click="getCalendarInTodos(day)"
                         >
                             <span
                                 :class="
@@ -118,7 +119,7 @@
                             >
 
                             <span
-                                v-for="(item, idx) in day.todo"
+                                v-for="(item, idx) in day.todo.filter((el, idx) => idx < 3)"
                                 :key="idx"
                                 v-if="day.todo"
                                 class="hidden lg:block text-xs font-medium text-gray-500"
@@ -165,5 +166,9 @@ const getAnotherCal = (type: boolean) => {
     }
 
     CalendarStore.setCalendarDate(kijune.value)
+}
+
+const getCalendarInTodos = (todo: any) => {
+    console.log(todo)
 }
 </script>

@@ -33,10 +33,8 @@ export const useTodoStore = defineStore('useTodoStore', () => {
                     (el) => el.days === currentDay.value
                 )
                 if (dayIdx > -1) {
-                    console.log('1111')
                     todoList.value[yearIdx].yearTodos[monthIdx].monthTodos[dayIdx].Todos.push(todo)
                 } else {
-                    console.log('111112312')
                     const reqTodo: DaysTodo = setDaysTodo(todo)
                     todoList.value[yearIdx].yearTodos[monthIdx].monthTodos.push(reqTodo)
                 }
